@@ -1,6 +1,0 @@
-Metadata-Version: 2.1
-Name: radarutils
-Version: 0.1.0
-Summary: Utility functions for radar data processing
-Author: Jianyang Wang
-Requires-Python: >=3.6

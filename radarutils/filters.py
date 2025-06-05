@@ -54,7 +54,9 @@ def vitalindex_filter(signal):
         map_VI[idx] = np.mean(amp) / np.std(amp)
     return map_VI, signal_circlefit
 
-
+def moving_average(x, window_size):
+    kernel = np.ones(window_size) / window_size
+    return np.convolve(x, kernel, mode='same')  # 可选 'valid', 'full'
 
 def differentiator_2order(signal, time_dim=0, pad_mode='zero'):
     """
