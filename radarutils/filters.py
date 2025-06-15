@@ -51,7 +51,7 @@ def vitalindex_filter(signal):
         fitted, _ = circle_fit(vector)
         signal_circlefit[(slice(None),) + idx] = fitted
         amp = np.abs(fitted)
-        map_VI[idx] = np.mean(amp) / np.std(amp)
+        map_VI[idx] = np.mean(amp) / (np.std(amp)+1e-8)
     return map_VI, signal_circlefit
 
 def moving_average(x, window_size):
