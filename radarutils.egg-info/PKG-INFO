@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: radarutils
+Version: 0.1.0
+Summary: Utility functions for radar data processing
+Author: Jianyang Wang
+Requires-Python: >=3.6
+License-File: LICENSE
+Dynamic: author
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary
