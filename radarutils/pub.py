@@ -403,7 +403,7 @@ def QRS_detection(raw_signal, fs):
         if R_Synced[ld].size == 0:
             print('No QRS complexes were found. Returning an empty FPT table')
             FPT = []
-            continue
+            return
         # else:
         WB = int(np.round(0.05 * fs))
         QRS_region = np.array([R_Synced[ld] - WB, R_Synced[ld] + WB]).transpose()
