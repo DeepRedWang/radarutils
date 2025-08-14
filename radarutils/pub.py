@@ -296,7 +296,7 @@ def QRS_detection(raw_signal, fs):
     Dx2 = Dx2[l2:-l1, :]
 
     Dx = np.abs(Dx1 + Dx2)
-    Dx = Dx / np.std(Dx, axis=0)
+    Dx = Dx / (np.std(Dx, axis=0)+1e-12)
     saturation = np.quantile(Dx, 0.99, axis=0)
     for ld in range(0, Dx.shape[1]):
         Dx[Dx[:, ld] > saturation[ld], ld] = saturation[ld]
@@ -407,13 +407,27 @@ def QRS_detection(raw_signal, fs):
             WB = int(np.round(0.05 * fs))
             QRS_region = np.array([R_Synced[ld] - WB, R_Synced[ld] + WB]).transpose()
 
+
             if QRS_region[0, 0] < 0:
-                ind = np.where(QRS_region[0] >= 0)[0][0]
-                R_Synced[ld] = R_Synced[ld][ind:-1]
+                # 检查所有QRS窗口的起始点（第一列），找到第一个大于等于0的索引
+                valid_indices = np.where(QRS_region[:, 0] >= 0)[0]
+                
+                # 确保找到了至少一个有效的索引
+                if valid_indices.size > 0:
+                    first_valid_index = valid_indices[0]
+                    # 从第一个有效的R波开始，保留到末尾
+                    R_Synced[ld] = R_Synced[ld][first_valid_index:]
+                else:
+                    # 如果所有R波窗口都在0之前（虽然不太可能），则清空
+                    R_Synced[ld] = np.array([])
+                    
+            # if QRS_region[0, 0] < 0:
+            #     ind = np.where(QRS_region[0] >= 0)[0][0]
+            #     R_Synced[ld] = R_Synced[ld][ind:]
 
             if QRS_region[0, 1] >= signal.shape[0]:
                 ind = np.where(QRS_region[0] < signal.shape[0])[0][-1]
-                R_Synced[ld] = R_Synced[ld][ind:-1]
+                R_Synced[ld] = R_Synced[ld][ind:]
 
             FPT = np.zeros([R_Synced[ld].shape[0], 13])
 
